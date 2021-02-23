@@ -1,0 +1,25 @@
+import pandas as pd
+# check the number of edges right side of each point
+def pip(Polygon_pt, point):
+    cn = 0
+    for i in range(len(Polygon_pt)):
+        j = i+1 if i+1<len(Polygon_pt) else 0
+        if (point[1]-Polygon_pt[i][1])*(point[1]-Polygon_pt[j][1])<=0:
+            if point[0]<Polygon_pt[i][0]+(Polygon_pt[j][0]-Polygon_pt[i][0])/(Polygon_pt[j][1]-Polygon_pt[i][1]):
+                cn+=1
+    return 'inside' if cn%2==1 else 'outside'# an interesting fact
+
+Polygon_pt = []
+points = []
+with open('./input_question_6_polygon', "rt") as f:
+    for line in f:
+        Polygon_pt.append(list(int, line.split()))
+with open('./input_question_6_points', "rt") as f:
+    for line in f:
+        points.append(list(int, line.split()))
+points.pop()  # the last element is a space
+ans = []
+for point in points:
+    ans.append([point[0], point[1], pip(Polygon_pt, point)])
+ans = pd.DataFrame(ans)
+ans.to_csv('./output_question_6', index=None, header=None, sep = ' ')
